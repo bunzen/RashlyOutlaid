@@ -24,7 +24,7 @@ furnished to do so, subject to the following conditions:
 import socket
 from collections import namedtuple
 
-ASNRecord = namedtuple("ASNRecord", ["asn", "prefix", "asname", "cn", "domain", "isp", "peers"])
+ASNRecord = namedtuple("ASNRecord", ["asn", "prefix", "asname", "cn", "isp", "peers"])
 
 class Whois(object):
 
