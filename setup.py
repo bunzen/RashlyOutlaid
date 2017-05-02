@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "RashlyOutlaid",
-    version = "0.10.0",
+    version = "0.10.1",
     author = "Geir Skjotskift",
     author_email = "geir@underworld.no",
     description = "Perform ASN Whois against shadowserver.org",
@@ -18,7 +18,6 @@ setup(
     keywords = "asn whois shadowserver",
     url = "https://github.com/bunzen/RashlyOutlaid",
     packages=['RashlyOutlaid', ],
-    long_description=read('README.md'),
     classifiers=[
         "Development Status :: 4 - Beta",
         "Topic :: Utilities",

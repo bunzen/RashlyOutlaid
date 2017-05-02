@@ -8,7 +8,14 @@ about
 
  Performs whois queries against asn.shadowserver.org. If you query for a list of IP-addresses the library will perform a properly formated bulk query as described and required by the Shadowserver foundation.
 
-The result is cached. If the peers property or the query property is changed, a new query will be executed when the result property is called. Subsequent calls to .result will only access the cached result. 
+The result is cached. If the peers property or the query property is changed, a new query will be executed when the result property is called. Subsequent calls to .result will only access the cached result.
+
+install
+-------
+
+```bash
+# pip install RashlyOutlaid
+```
 
 shadowserver service
 --------------------
