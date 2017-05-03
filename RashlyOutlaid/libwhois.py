@@ -24,7 +24,42 @@ furnished to do so, subject to the following conditions:
 import socket
 from collections import namedtuple
 
+try:
+    text_type = unicode
+    binary_type = str
+except NameError:
+    text_type = str
+    binary_type = bytes
+
+
 ASNRecord = namedtuple("ASNRecord", ["asn", "prefix", "asname", "cn", "isp", "peers"])
+
+
+def astext(data):
+    """
+    Given a unicode/str/bytes always return str.
+
+    We prefer to work with the 'native' string type for the version of python
+    we run on, and this gets us that.
+    """
+    if isinstance(data, str):
+        return data
+    elif isinstance(data, text_type):
+        return data.encode("utf-8")
+    elif isinstance(data, binary_type):
+        return data.decode("utf-8")
+    raise TypeError('{!r} not a string'.format(data))
+
+
+def asbinary(data):
+    """
+    Given a unicode/str/bytes always return a format suitable for sending on the
+    wire or for use with file descriptors ope in 'b' mode.
+    """
+    if isinstance(data, text_type):
+        return data.encode("utf-8")
+    return data
+
 
 class Whois(object):
 
@@ -39,7 +74,7 @@ class Whois(object):
         self._connection = socket.create_connection((self.address, self.port), self.timeout)
 
     def send(self, query):
-        self._connection.send("".join([query, "\n"]))
+        self._connection.send(b"".join([query, b"\n"]))
 
     def read(self):
         self.buffer = ""
@@ -48,8 +83,8 @@ class Whois(object):
             if not data:
                 self._connection.close()
                 return
-            self.buffer += data
-            
+            self.buffer += astext(data)
+
 
 class ASNWhois(Whois):
 
@@ -84,7 +119,7 @@ class ASNWhois(Whois):
                 query = elements[self._base_idx - 1]
             else:
                 query = self.query
-            self._result[query] = ASNRecord(*asdata)
+            self._result[astext(query)] = ASNRecord(*asdata)
         return self._result
 
     def set_result(self, vals):
@@ -105,7 +140,7 @@ class ASNWhois(Whois):
 
     def _perform_query(self):
         if not self._query: raise QueryError("Trying to perform empty query")
-        if isinstance(self.query, str) or isinstance(self.query, unicode):
+        if isinstance(self.query, text_type) or isinstance(self.query, binary_type):
             self._multiple = False
             self._query_single()
         elif isinstance(self.query, list):
@@ -121,32 +156,33 @@ class ASNWhois(Whois):
         if not is_ip(self.query): raise QueryError("Not an IPv4 address " + self.query)
         self.connect()
         if self.peers:
-            self.send(" ".join(["peer", self._query]))
+            self.send(b" ".join([b"peer", asbinary(self._query)]))
         else:
-            self.send(" ".join(["origin", self._query]))
+            self.send(b" ".join([b"origin", asbinary(self._query)]))
         self.read()
 
     def _query_multiple(self):
         self.connect()
         if self.peers:
-            self.send("begin peer")
+            self.send(b"begin peer")
         else:
-            self.send("begin origin")
+            self.send(b"begin origin")
         for query in self._query:
             if not is_ip(query):
                 self._connection.close()
                 raise QueryError("Not an IPv4 address " + query)
-            self.send(query)
-        self.send("end")
+            self.send(asbinary(query))
+        self.send(b"end")
         self.read()
 
     result = property(get_result, set_result)
     peers = property(get_peers, set_peers)
     query = property(get_query, set_query)
-        
+
 
 def is_ip(data):
-    if not isinstance(data, str) and not isinstance(data, unicode): return False
+    if not isinstance(data, text_type) and not isinstance(data, binary_type): return False
+    data = astext(data)
     elements = data.strip().split(".")
     if not len(elements) == 4: return False
     for c, t in enumerate(elements):
