@@ -10,7 +10,7 @@ def read(fname):
 
 setup(
     name = "RashlyOutlaid",
-    version = "0.10.1",
+    version = "0.11.0",
     author = "Geir Skjotskift",
     author_email = "geir@underworld.no",
     description = "Perform ASN Whois against shadowserver.org",
