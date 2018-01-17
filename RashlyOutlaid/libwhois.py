@@ -45,9 +45,9 @@ def astext(data):
     if isinstance(data, str):
         return data
     elif isinstance(data, text_type):
-        return data.encode("utf-8")
+        return data.encode("utf-8", "ignore")
     elif isinstance(data, binary_type):
-        return data.decode("utf-8")
+        return data.decode("utf-8", "ignore")
     raise TypeError('{!r} not a string'.format(data))
 
 
