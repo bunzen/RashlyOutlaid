@@ -20,7 +20,7 @@ install
 shadowserver service
 --------------------
 
-http://www.shadowserver.org/wiki/pmwiki.php/Services/IP-BGP
+http://wiki.shadowserver.org/wiki/pmwiki.php/Services/IP-BGP
 
 Example
 -------
