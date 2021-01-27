@@ -12,10 +12,12 @@ def read(fname):
 
 setup(
     name = "RashlyOutlaid",
-    version = "0.11.0",
+    version = "0.13.0",
     author = "Geir Skjotskift",
     author_email = "geir@underworld.no",
     description = "Perform ASN Whois against shadowserver.org",
+    long_description=read("README.md"),
+    long_description_content_type='text/markdown',
     license = "MIT",
     keywords = "asn whois shadowserver",
     url = "https://github.com/bunzen/RashlyOutlaid",
@@ -25,4 +27,5 @@ setup(
         "Topic :: Utilities",
         "License :: OSI Approved :: MIT License",
     ],
+    python_requires='>=3.6',
 )

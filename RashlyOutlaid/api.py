@@ -59,7 +59,7 @@ def parse_shadowserver_time(time_string: Text) -> datetime.datetime:
 
 
 def malware(hashes: List[Text]) -> List[MalwareRecord]:
-    """Lookup the list of hashes using the Shadowserver malware aPI
+    """Lookup the list of hashes using the Shadowserver malware API
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
     """
 
@@ -147,7 +147,7 @@ def peer(ip_addresses: List) -> List[ASNRecord]:
 
 
 def asn(asnumber: int) -> List[ASNRecord]:
-    """Lookup the asn via the Shadowserver peer web api
+    """Lookup the asn via the Shadowserver asn web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
     """
 
@@ -166,7 +166,7 @@ def asn(asnumber: int) -> List[ASNRecord]:
 
 
 def prefix(asnumber: int) -> List[Text]:
-    """Lookup the list of ip addresses vs the Shadowserver peer web api
+    """Lookup the list of ip addresses vs the Shadowserver prefix web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
     """
 
