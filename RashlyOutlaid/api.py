@@ -69,7 +69,7 @@ def malware(hashes: List[Text]) -> List[MalwareRecord]:
     res = requests.get(url)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
+        msg = (f"RashlyOutlaid.api.malware could not lookup {hashes}. "
                f"Got status='{res.status_code}' while requesing '{url}'")
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -138,7 +138,8 @@ def peer(ip_addresses: List) -> List[ASNRecord]:
     res = requests.get(url)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
+        msg = (f"RashlyOutlaid.api.peer could not loopup peers "
+               f"of {ip_addresses}. "
                f"Got status='{res.status_code}' while requesing '{url}'")
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -157,7 +158,7 @@ def asn(asnumber: int) -> List[ASNRecord]:
     res = requests.get(url)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
+        msg = (f"RashlyOutlaid.api.asn could not loopup asn {asnumber}. "
                f"Got status='{res.status_code}' while requesing '{url}'")
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -176,7 +177,7 @@ def prefix(asnumber: int) -> List[Text]:
     res = requests.get(url)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
+        msg = (f"RashlyOutlaid.api.prefix could not loopup asn {asnumber}. "
                f"Got status='{res.status_code}' while requesing '{url}'")
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
