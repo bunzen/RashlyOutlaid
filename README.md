@@ -11,6 +11,8 @@ asn.shadowserver.org.  If you query for a list of IP-addresses the library will
 perform a properly formated bulk query as described and required by the
 Shadowserver foundation.
 
+The new part is written with python3 in mind. If you must use python2, require RashlyOutlaid==0.11.0 and use the older RashlyOutlaid.libwhois (last example)
+
 install
 -------
 
@@ -85,6 +87,9 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709 First Seen: 2015
 
 Example using the older whois API
 ---------------------------------
+
+This is part of the 0.11 version and can be used with python 2
+
 ```python
 >>> from RashlyOutlaid.libwhois import ASNWhois
 >>> asnwhois = ASNWhois()
