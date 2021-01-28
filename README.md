@@ -82,3 +82,20 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709 First Seen: 2015
 >>>
 
 ```
+
+Example using the older whois API
+---------------------------------
+```python
+>>> from RashlyOutlaid.libwhois import ASNWhois
+>>> asnwhois = ASNWhois()
+>>> asnwhois.query = ["212.58.246.94", "94.229.76.35"]
+>>> asnwhois.peers = True
+>>> asnwhois.result["212.58.246.94"]
+ASNRecord(asn='2818', prefix='212.58.224.0/19', asname='BBC', cn='GB', isp='BBC Internet Services, UK, GB', peers=['286', '3356'])
+>>> for q, r in asnwhois.result.items():
+...    print q, r.cn, r.isp
+...
+94.229.76.35 GB AS UK Dedicated Servers, Hosting and Co-Location, GB
+212.58.246.94 GB BBC Internet Services, UK, GB
+>>>
+```
