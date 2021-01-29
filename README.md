@@ -85,6 +85,11 @@ da39a3ee5e6b4b0d3255bfef95601890afd80709 First Seen: 2015
 
 ```
 
+If you need to use a proxy you can pass keyword arguments through to the underlying requests library
+```python
+>>> api.malware(["8B2E701E91101955C73865589A4C72999AEABC11043F712E05FDB1C17C4AB19A"], proxies={"http": "http://localhost:8080", "https": "http://localhost:8080"})
+```
+
 Example using the older whois API
 ---------------------------------
 
