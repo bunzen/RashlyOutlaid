@@ -20,7 +20,7 @@ furnished to do so, subject to the following conditions:
 """
 
 from collections import namedtuple
-from typing import Dict, List, Text
+from typing import Dict, List, Text, Any
 import datetime
 
 import requests
@@ -58,15 +58,23 @@ def parse_shadowserver_time(time_string: Text) -> datetime.datetime:
         raise
 
 
-def malware(hashes: List[Text]) -> List[MalwareRecord]:
+def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
     """Lookup the list of hashes using the Shadowserver malware API
+
+    You can pass arguments to requests suchs as proxies:
+
+    api.malware(["4b21f25e02b0d1df86ab745f82e140ab1cc498af"],
+                proxies={'http': 'http://myproxy.example.com:8080',
+                         'https': 'http://myproxy.example.com:8080'
+                        })
+
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
     """
 
     url = (f'https://api.shadowserver.org/malware/info'
            f'?sample={",".join(hashes)}')
 
-    res = requests.get(url)
+    res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
         msg = (f"RashlyOutlaid.api.malware could not lookup {hashes}. "
@@ -108,15 +116,23 @@ def _map_shadowserver_model(ssdata: List[Dict]) -> List[ASNRecord]:
             for x in ssdata]
 
 
-def origin(ip_addresses: List) -> List[ASNRecord]:
+def origin(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
     """Lookup the list of ip addresses vs the Shadowserver origin web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
+
+    You can pass arguments to requests suchs as proxies:
+
+    api.origin(["8.8.8.8"],
+                proxies={'http': 'http://myproxy.example.com:8080',
+                         'https': 'http://myproxy.example.com:8080'
+                        })
+
     """
 
     url = (f"https://api.shadowserver.org/net/asn"
            f"?origin={','.join(ip_addresses)}")
 
-    res = requests.get(url)
+    res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
         msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
@@ -127,15 +143,23 @@ def origin(ip_addresses: List) -> List[ASNRecord]:
     return _map_shadowserver_model(ss_data)
 
 
-def peer(ip_addresses: List) -> List[ASNRecord]:
+def peer(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
     """Lookup the list of ip addresses vs the Shadowserver peer web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
+
+    You can pass arguments to requests suchs as proxies:
+
+    api.peer(["8.8.8.8"],
+             proxies={'http': 'http://myproxy.example.com:8080',
+                      'https': 'http://myproxy.example.com:8080'
+                     })
+
     """
 
     url = (f"https://api.shadowserver.org/net/asn"
            f"?peer={','.join(ip_addresses)}")
 
-    res = requests.get(url)
+    res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
         msg = (f"RashlyOutlaid.api.peer could not loopup peers "
@@ -147,15 +171,22 @@ def peer(ip_addresses: List) -> List[ASNRecord]:
     return _map_shadowserver_model(ss_data)
 
 
-def asn(asnumber: int) -> List[ASNRecord]:
+def asn(asnumber: int, **kwargs_requests) -> List[ASNRecord]:
     """Lookup the asn via the Shadowserver asn web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
+
+    You can pass arguments to requests suchs as proxies:
+
+    api.asn(12345,
+            proxies={'http': 'http://myproxy.example.com:8080',
+                     'https': 'http://myproxy.example.com:8080'
+                    })
     """
 
     url = (f"https://api.shadowserver.org/net/asn"
            f"?query={asnumber}")
 
-    res = requests.get(url)
+    res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
         msg = (f"RashlyOutlaid.api.asn could not loopup asn {asnumber}. "
@@ -166,15 +197,22 @@ def asn(asnumber: int) -> List[ASNRecord]:
     return _map_shadowserver_model(ss_data)
 
 
-def prefix(asnumber: int) -> List[Text]:
+def prefix(asnumber: int, **kwargs_requests: Any) -> List[Text]:
     """Lookup the list of ip addresses vs the Shadowserver prefix web api
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
+
+    You can pass arguments to requests suchs as proxies:
+
+    api.prefix(12345,
+               proxies={'http': 'http://myproxy.example.com:8080',
+                        'https': 'http://myproxy.example.com:8080'
+                       })
     """
 
     url = (f"https://api.shadowserver.org/net/asn"
            f"?prefix={asnumber}")
 
-    res = requests.get(url)
+    res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
         msg = (f"RashlyOutlaid.api.prefix could not loopup asn {asnumber}. "
