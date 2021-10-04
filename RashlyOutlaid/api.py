@@ -19,13 +19,14 @@ furnished to do so, subject to the following conditions:
     DEALINGS IN THE SOFTWARE.
 """
 
-from collections import namedtuple
-from typing import Dict, List, Text, Any
 import datetime
+from collections import namedtuple
+from typing import Any, Dict, List, Text
 
 import requests
 
 import RashlyOutlaid
+import RashlyOutlaid.libwhois
 
 ASNRecord = namedtuple('ASNRecord',
                        ['asn', 'prefix', 'asname', 'cn', 'isp', 'peers'])

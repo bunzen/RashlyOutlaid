@@ -10,17 +10,18 @@ from setuptools import setup
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
+
 setup(
-    name = "RashlyOutlaid",
-    version = "0.15.0",
-    author = "Geir Skjotskift",
-    author_email = "geir@underworld.no",
-    description = "Perform ASN Whois against shadowserver.org",
+    name="RashlyOutlaid",
+    version="0.16.0",
+    author="Geir Skjotskift",
+    author_email="geir@underworld.no",
+    description="Perform ASN Whois against shadowserver.org",
     long_description=read("README.md"),
     long_description_content_type='text/markdown',
-    license = "MIT",
-    keywords = "asn whois shadowserver",
-    url = "https://github.com/bunzen/RashlyOutlaid",
+    license="MIT",
+    keywords="asn whois shadowserver",
+    url="https://github.com/bunzen/RashlyOutlaid",
     packages=['RashlyOutlaid', ],
     classifiers=[
         "Development Status :: 4 - Beta",
