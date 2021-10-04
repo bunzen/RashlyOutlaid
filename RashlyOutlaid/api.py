@@ -108,12 +108,12 @@ def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
 def _map_shadowserver_model(ssdata: List[Dict]) -> List[ASNRecord]:
     """Map the result from shadowserver to a list of ASNRecords"""
 
-    return [ASNRecord(x['asn'],
-                      x['prefix'] if 'prefix' in x else '',
-                      x['asname_short'],
-                      x['geo'],
-                      x['asname_long'],
-                      x['peer'].split() if 'peer' in x else [])
+    return [ASNRecord(x.get('asn', ''),
+                      x.get('prefix', ''),
+                      x.get('asname_short', ''),
+                      x.get('geo', ''),
+                      x.get('asname_long', ''),
+                      x.get('peer', '').split())
             for x in ssdata]
 
 
