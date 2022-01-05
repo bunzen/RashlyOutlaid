@@ -18,15 +18,18 @@ setup(
     author_email="geir@underworld.no",
     description="Perform ASN Whois against shadowserver.org",
     long_description=read("README.md"),
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     license="MIT",
     keywords="asn whois shadowserver",
     url="https://github.com/bunzen/RashlyOutlaid",
-    packages=['RashlyOutlaid', ],
+    packages=[
+        "RashlyOutlaid",
+    ],
+    install_requires=["requests", "responses", "pytest"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Topic :: Utilities",
         "License :: OSI Approved :: MIT License",
     ],
-    python_requires='>=3.6',
+    python_requires=">=3.6",
 )
