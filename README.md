@@ -3,6 +3,13 @@ RashlyOutlaid
 
 Library to interact with the [shadowserver](https://www.shadowserver.org) API and ASN whois services.
 
+changes 0.18:
+-----
+
+AVRecord, MalwareRecord and ASNRecord is now dataclasses to better support typing (used to be namedtuple)
+   - The usage of the resulting objects should not change, but the ASNRecord in the "old" api "libwhois" and in the "new" is no longer the same class
+
+
 about
 -----
 
