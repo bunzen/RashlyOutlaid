@@ -13,7 +13,7 @@ def read(fname):
 
 setup(
     name="RashlyOutlaid",
-    version="0.17.0",
+    version="0.18.0",
     author="Geir Skjotskift",
     author_email="geir@underworld.no",
     description="Perform ASN Whois against shadowserver.org",
@@ -25,7 +25,7 @@ setup(
     packages=[
         "RashlyOutlaid",
     ],
-    install_requires=["requests", "responses", "pytest"],
+    install_requires=["requests", "responses", "pytest", "dataclasses"],
     classifiers=[
         "Development Status :: 4 - Beta",
         "Topic :: Utilities",

@@ -20,40 +20,61 @@ furnished to do so, subject to the following conditions:
 """
 
 import datetime
-from collections import namedtuple
-from typing import Any, Dict, List, Text
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Text
 
 import requests
 
 import RashlyOutlaid
 import RashlyOutlaid.libwhois
 
-ASNRecord = namedtuple("ASNRecord", ["asn", "prefix", "asname", "cn", "isp", "peers"])
-AVRecord = namedtuple("AVRecord", ["md5", "vendor", "signature", "timestamp"])
-MalwareRecord = namedtuple(
-    "MalwareRecord",
-    [
-        "timestamp",
-        "first_seen",
-        "last_seen",
-        "type",
-        "sha256",
-        "md5",
-        "sha1",
-        "pehash",
-        "tlsh",
-        "import_hash",
-        "entropy",
-        "filesize",
-        "adobe_malware_classifier",
-        "magic",
-        "anti_virus",
-    ],
-)
+
+@dataclass
+class ASNRecord:
+    """Dataclass containing the ASNRecord"""
+
+    asn: str
+    prefix: str
+    asname: str
+    cn: str
+    isp: str
+    peers: List[str]
 
 
-def parse_shadowserver_time(time_string: Text) -> datetime.datetime:
+@dataclass
+class AVRecord:
+    """Dataclass continating the AVRecord"""
+
+    md5: Optional[str]
+    vendor: str
+    signature: str
+    timestamp: Optional[datetime.datetime]
+
+
+@dataclass
+class MalwareRecord:
+    timestamp: Optional[datetime.datetime]
+    first_seen: Optional[datetime.datetime]
+    last_seen: Optional[datetime.datetime]
+    type: str
+    sha256: str
+    md5: str
+    sha1: str
+    pehash: str
+    tlsh: str
+    import_hash: str
+    entropy: str
+    filesize: str
+    adobe_malware_classifier: str
+    magic: str
+    anti_virus: List[AVRecord]
+
+
+def parse_shadowserver_time(time_string: Text) -> Optional[datetime.datetime]:
     """Parse a date on the format '2018-10-17 20:36:23'"""
+
+    if not time_string:
+        return None
 
     try:
         return datetime.datetime.strptime(time_string[:19], "%Y-%m-%d %H:%M:%S")
@@ -89,9 +110,9 @@ def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
     ss_data: Dict = res.json()
     return [
         MalwareRecord(
-            parse_shadowserver_time(elem["timestamp"]),
-            parse_shadowserver_time(elem["first_seen"]),
-            parse_shadowserver_time(elem["last_seen"]),
+            parse_shadowserver_time(elem.get("timestamp", "")),
+            parse_shadowserver_time(elem.get("first_seen", "")),
+            parse_shadowserver_time(elem.get("last_seen", "")),
             elem.get("type"),
             elem.get("sha256"),
             elem.get("md5"),
@@ -108,7 +129,7 @@ def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
                     x.get("md5"),
                     x.get("vendor"),
                     x.get("signature"),
-                    parse_shadowserver_time(x["timestamp"]),
+                    parse_shadowserver_time(x.get("timestamp", "")),
                 )
                 for x in elem["anti_virus"]
             ],
