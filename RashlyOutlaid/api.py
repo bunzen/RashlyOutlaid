@@ -28,32 +28,35 @@ import requests
 import RashlyOutlaid
 import RashlyOutlaid.libwhois
 
-ASNRecord = namedtuple('ASNRecord',
-                       ['asn', 'prefix', 'asname', 'cn', 'isp', 'peers'])
-AVRecord = namedtuple('AVRecord', ['md5', 'vendor', 'signature', 'timestamp'])
-MalwareRecord = namedtuple('MalwareRecord',
-                           ['timestamp',
-                            'first_seen',
-                            'last_seen',
-                            'type',
-                            'sha256',
-                            'md5',
-                            'sha1',
-                            'pehash',
-                            'tlsh',
-                            'import_hash',
-                            'entropy',
-                            'filesize',
-                            'adobe_malware_classifier',
-                            'magic',
-                            'anti_virus'])
+ASNRecord = namedtuple("ASNRecord", ["asn", "prefix", "asname", "cn", "isp", "peers"])
+AVRecord = namedtuple("AVRecord", ["md5", "vendor", "signature", "timestamp"])
+MalwareRecord = namedtuple(
+    "MalwareRecord",
+    [
+        "timestamp",
+        "first_seen",
+        "last_seen",
+        "type",
+        "sha256",
+        "md5",
+        "sha1",
+        "pehash",
+        "tlsh",
+        "import_hash",
+        "entropy",
+        "filesize",
+        "adobe_malware_classifier",
+        "magic",
+        "anti_virus",
+    ],
+)
 
 
 def parse_shadowserver_time(time_string: Text) -> datetime.datetime:
     """Parse a date on the format '2018-10-17 20:36:23'"""
 
     try:
-        return datetime.datetime.strptime(time_string[:19], '%Y-%m-%d %H:%M:%S')
+        return datetime.datetime.strptime(time_string[:19], "%Y-%m-%d %H:%M:%S")
     except:
         print(time_string)
         raise
@@ -72,49 +75,62 @@ def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
     https://www.shadowserver.org/what-we-do/network-reporting/api-asn-and-network-queries/
     """
 
-    url = (f'https://api.shadowserver.org/malware/info'
-           f'?sample={",".join(hashes)}')
+    url = f"https://api.shadowserver.org/malware/info" f'?sample={",".join(hashes)}'
 
     res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.malware could not lookup {hashes}. "
-               f"Got status='{res.status_code}' while requesing '{url}'")
+        msg = (
+            f"RashlyOutlaid.api.malware could not lookup {hashes}. "
+            f"Got status='{res.status_code}' while requesing '{url}'"
+        )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
     ss_data: Dict = res.json()
-    return [MalwareRecord(parse_shadowserver_time(elem["timestamp"]),
-                          parse_shadowserver_time(elem["first_seen"]),
-                          parse_shadowserver_time(elem["last_seen"]),
-                          elem.get("type"),
-                          elem.get("sha256"),
-                          elem.get("md5"),
-                          elem.get("sha1"),
-                          elem.get("pehash"),
-                          elem.get("tlsh"),
-                          elem.get("import_hash"),
-                          elem.get("entropic"),
-                          elem.get("filesize"),
-                          elem.get("adobe_malware_classifier"),
-                          elem.get("magic"),
-                          [AVRecord(x.get("md5"),
-                                    x.get("vendor"),
-                                    x.get("signature"),
-                                    parse_shadowserver_time(x["timestamp"]))
-                           for x in elem["anti_virus"]])
-            for elem in ss_data]
+    return [
+        MalwareRecord(
+            parse_shadowserver_time(elem["timestamp"]),
+            parse_shadowserver_time(elem["first_seen"]),
+            parse_shadowserver_time(elem["last_seen"]),
+            elem.get("type"),
+            elem.get("sha256"),
+            elem.get("md5"),
+            elem.get("sha1"),
+            elem.get("pehash"),
+            elem.get("tlsh"),
+            elem.get("import_hash"),
+            elem.get("entropic"),
+            elem.get("filesize"),
+            elem.get("adobe_malware_classifier"),
+            elem.get("magic"),
+            [
+                AVRecord(
+                    x.get("md5"),
+                    x.get("vendor"),
+                    x.get("signature"),
+                    parse_shadowserver_time(x["timestamp"]),
+                )
+                for x in elem["anti_virus"]
+            ],
+        )
+        for elem in ss_data
+    ]
 
 
 def _map_shadowserver_model(ssdata: List[Dict]) -> List[ASNRecord]:
     """Map the result from shadowserver to a list of ASNRecords"""
 
-    return [ASNRecord(x.get('asn', ''),
-                      x.get('prefix', ''),
-                      x.get('asname_short', ''),
-                      x.get('geo', ''),
-                      x.get('asname_long', ''),
-                      x.get('peer', '').split())
-            for x in ssdata]
+    return [
+        ASNRecord(
+            x.get("asn", ""),
+            x.get("prefix", ""),
+            x.get("asname_short", ""),
+            x.get("geo", ""),
+            x.get("asname_long", ""),
+            x.get("peer", "").split(),
+        )
+        for x in ssdata
+    ]
 
 
 def origin(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
@@ -130,14 +146,15 @@ def origin(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
 
     """
 
-    url = (f"https://api.shadowserver.org/net/asn"
-           f"?origin={','.join(ip_addresses)}")
+    url = f"https://api.shadowserver.org/net/asn" f"?origin={','.join(ip_addresses)}"
 
     res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.origin could not loopup origin. "
-               f"Got status='{res.status_code}' while requesing '{url}'")
+        msg = (
+            f"RashlyOutlaid.api.origin could not loopup origin. "
+            f"Got status='{res.status_code}' while requesing '{url}'"
+        )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
     ss_data: List[Dict] = res.json()
@@ -157,15 +174,16 @@ def peer(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
 
     """
 
-    url = (f"https://api.shadowserver.org/net/asn"
-           f"?peer={','.join(ip_addresses)}")
+    url = f"https://api.shadowserver.org/net/asn" f"?peer={','.join(ip_addresses)}"
 
     res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.peer could not loopup peers "
-               f"of {ip_addresses}. "
-               f"Got status='{res.status_code}' while requesing '{url}'")
+        msg = (
+            f"RashlyOutlaid.api.peer could not loopup peers "
+            f"of {ip_addresses}. "
+            f"Got status='{res.status_code}' while requesing '{url}'"
+        )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
     ss_data: List[Dict] = res.json()
@@ -184,14 +202,15 @@ def asn(asnumber: int, **kwargs_requests) -> List[ASNRecord]:
                     })
     """
 
-    url = (f"https://api.shadowserver.org/net/asn"
-           f"?query={asnumber}")
+    url = f"https://api.shadowserver.org/net/asn" f"?query={asnumber}"
 
     res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.asn could not loopup asn {asnumber}. "
-               f"Got status='{res.status_code}' while requesing '{url}'")
+        msg = (
+            f"RashlyOutlaid.api.asn could not loopup asn {asnumber}. "
+            f"Got status='{res.status_code}' while requesing '{url}'"
+        )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
     ss_data: List[Dict] = [res.json()]
@@ -210,14 +229,15 @@ def prefix(asnumber: int, **kwargs_requests: Any) -> List[Text]:
                        })
     """
 
-    url = (f"https://api.shadowserver.org/net/asn"
-           f"?prefix={asnumber}")
+    url = f"https://api.shadowserver.org/net/asn" f"?prefix={asnumber}"
 
     res = requests.get(url, **kwargs_requests)
 
     if res.status_code != 200:
-        msg = (f"RashlyOutlaid.api.prefix could not loopup asn {asnumber}. "
-               f"Got status='{res.status_code}' while requesing '{url}'")
+        msg = (
+            f"RashlyOutlaid.api.prefix could not loopup asn {asnumber}. "
+            f"Got status='{res.status_code}' while requesing '{url}'"
+        )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
     ss_data: List[Text] = res.json()
