@@ -10,7 +10,7 @@ changes 0.19:
 Made the new dataclasses iterable to keep old functionality to store the objects as a list of values and rebuild them
 
 ```python
->>> import RashlyOutlaid.api as api
+>>> from RashlyOutlaid import api
 >>> rec = api.asn(12345)[0]
 >>> rec
 ASNRecord(asn='12345', prefix='', asname='AS12345', cn='IT', isp='GENERAL SOFTWARE S.R.L.', peers=[])
