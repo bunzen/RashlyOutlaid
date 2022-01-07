@@ -39,3 +39,19 @@ def test_query() -> None:
     assert result.asname == "AS2818"
     assert result.cn == "GB"
     assert result.isp == "BBC"
+
+
+@responses.activate
+def test_iterator() -> None:
+
+    responses.add(
+        responses.GET,
+        query_responses["2818"]["url"],
+        json=query_responses["2818"]["response"],
+        status=query_responses["2818"]["status"],
+    )
+
+    result = shadowserver.asn("2818")[0]
+    result2 = shadowserver.ASNRecord(*list(result))
+
+    assert result == result2
