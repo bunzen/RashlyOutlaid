@@ -3,6 +3,25 @@ RashlyOutlaid
 
 Library to interact with the [shadowserver](https://www.shadowserver.org) API and ASN whois services.
 
+
+changes 0.19:
+-----
+
+Made the new dataclasses iterable to keep old functionality to store the objects as a list of values and rebuild them
+
+```python
+>>> import RashlyOutlaid.api as api
+>>> rec = api.asn(12345)[0]
+>>> rec
+ASNRecord(asn='12345', prefix='', asname='AS12345', cn='IT', isp='GENERAL SOFTWARE S.R.L.', peers=[])
+>>> rec_list = list(rec)
+>>> rec_list
+['12345', '', 'AS12345', 'IT', 'GENERAL SOFTWARE S.R.L.', []]
+>>> rec == api.ASNRecord(*rec_list)
+True
+>>>
+```
+
 changes 0.18:
 -----
 
