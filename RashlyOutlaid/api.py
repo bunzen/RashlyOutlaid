@@ -21,7 +21,7 @@ furnished to do so, subject to the following conditions:
 
 import datetime
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Text
+from typing import Any, Dict, Iterator, List, Optional, Text, Tuple
 
 import requests
 
@@ -40,6 +40,16 @@ class ASNRecord:
     isp: str
     peers: List[str]
 
+    def astuple(self) -> Tuple:
+        """return the fields as a tuple"""
+
+        return (self.asn, self.prefix, self.asname, self.cn, self.isp, self.peers)
+
+    def __iter__(self) -> Iterator:
+        """iterate over the tuple"""
+
+        yield from self.astuple()
+
 
 @dataclass
 class AVRecord:
@@ -49,6 +59,16 @@ class AVRecord:
     vendor: str
     signature: str
     timestamp: Optional[datetime.datetime]
+
+    def astuple(self) -> Tuple:
+        """return the fields as a tuple"""
+
+        return (self.md5, self.vendor, self.signature, self.timestamp)
+
+    def __iter__(self) -> Iterator:
+        """iterator over the tuple"""
+
+        yield from self.astuple()
 
 
 @dataclass
@@ -68,6 +88,32 @@ class MalwareRecord:
     adobe_malware_classifier: str
     magic: str
     anti_virus: List[AVRecord]
+
+    def astuple(self) -> Tuple:
+        """return the fields as a tuple"""
+
+        return (
+            self.timestamp,
+            self.first_seen,
+            self.last_seen,
+            self.type,
+            self.sha256,
+            self.md5,
+            self.sha1,
+            self.pehash,
+            self.tlsh,
+            self.import_hash,
+            self.entropy,
+            self.filesize,
+            self.adobe_malware_classifier,
+            self.magic,
+            self.anti_virus,
+        )
+
+    def __iter__(self) -> Iterator:
+        """iterate over the tuple"""
+
+        yield from self.astuple()
 
 
 def parse_shadowserver_time(time_string: Text) -> Optional[datetime.datetime]:

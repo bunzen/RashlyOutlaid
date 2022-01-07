@@ -55,3 +55,19 @@ def test_query() -> None:
         "58511",
     ]
     assert result.prefix == "212.58.224.0/19"
+
+
+@responses.activate
+def test_iterator() -> None:
+
+    responses.add(
+        responses.GET,
+        query_responses["212.58.245.94"]["url"],
+        json=query_responses["212.58.245.94"]["response"],
+        status=query_responses["212.58.245.94"]["status"],
+    )
+
+    result = shadowserver.peer(["212.58.245.94"])[0]
+    result2 = shadowserver.ASNRecord(*list(result))
+
+    assert result == result2
