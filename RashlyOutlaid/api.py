@@ -149,7 +149,7 @@ def malware(hashes: List[Text], **kwargs_requests: Any) -> List[MalwareRecord]:
     if res.status_code != 200:
         msg = (
             f"RashlyOutlaid.api.malware could not lookup {hashes}. "
-            f"Got status='{res.status_code}' while requesing '{url}'"
+            f"Got status='{res.status_code}' while requesting '{url}'"
         )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -219,8 +219,8 @@ def origin(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
 
     if res.status_code != 200:
         msg = (
-            f"RashlyOutlaid.api.origin could not loopup origin. "
-            f"Got status='{res.status_code}' while requesing '{url}'"
+            f"RashlyOutlaid.api.origin could not lookup origin. "
+            f"Got status='{res.status_code}' while requesting '{url}'"
         )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -247,9 +247,9 @@ def peer(ip_addresses: List, **kwargs_requests: Any) -> List[ASNRecord]:
 
     if res.status_code != 200:
         msg = (
-            f"RashlyOutlaid.api.peer could not loopup peers "
+            f"RashlyOutlaid.api.peer could not lookup peers "
             f"of {ip_addresses}. "
-            f"Got status='{res.status_code}' while requesing '{url}'"
+            f"Got status='{res.status_code}' while requesting '{url}'"
         )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -275,8 +275,8 @@ def asn(asnumber: int, **kwargs_requests) -> List[ASNRecord]:
 
     if res.status_code != 200:
         msg = (
-            f"RashlyOutlaid.api.asn could not loopup asn {asnumber}. "
-            f"Got status='{res.status_code}' while requesing '{url}'"
+            f"RashlyOutlaid.api.asn could not lookup asn {asnumber}. "
+            f"Got status='{res.status_code}' while requesting '{url}'"
         )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
@@ -302,8 +302,8 @@ def prefix(asnumber: int, **kwargs_requests: Any) -> List[Text]:
 
     if res.status_code != 200:
         msg = (
-            f"RashlyOutlaid.api.prefix could not loopup asn {asnumber}. "
-            f"Got status='{res.status_code}' while requesing '{url}'"
+            f"RashlyOutlaid.api.prefix could not lookup asn {asnumber}. "
+            f"Got status='{res.status_code}' while requesting '{url}'"
         )
         raise RashlyOutlaid.libwhois.QueryError(msg)
 
